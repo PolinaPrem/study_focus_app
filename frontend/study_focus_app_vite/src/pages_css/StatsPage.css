@@ -1,0 +1,64 @@
+
+body.stats-page-background {
+    background-image: url("/src/images/background5.jpg");
+    background-size: cover;
+    background-repeat: no-repeat;
+  }
+
+.dashboard-header{
+    margin-top: 3rem;
+    font-family: 'Poppins', sans-serif;
+}
+
+.dashboard-subtitle{
+    
+    font-family: 'Poppins', sans-serif;
+}
+.stats-section {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-bottom: 2rem;
+  }
+
+  .stats-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+
+  @media (min-width: 768px) {
+    .stats-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  } 
+
+  .stat-card {
+    background: white;
+    border-radius: 8px;
+    padding: 16px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border: 1px solid #eee;
+  }
+
+  .stat-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+  }
+
+  .stat-icon {
+    width: 16px;
+    height: 16px;
+    color: #666;
+  }
+
+  .section-title {
+    font-family: 'Poppins', sans-serif;
+    font-size: 1em;
+    font-weight:bold;
+    color: #3b3636;
+    margin: 0;
+  }

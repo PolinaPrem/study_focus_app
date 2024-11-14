@@ -1,0 +1,99 @@
+html,
+body {
+  display: block;
+  overflow-x: hidden;
+  margin: 0;
+  padding: 0; 
+ 
+
+}
+body.tasks-page-background {
+  background-image: url("/src/images/background2.jpg");
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+.task-page {
+  max-width: 100%;
+  overflow-x: hidden;
+  box-sizing: border-box;
+}
+.card-header{
+  margin-top: 4rem;
+  font-family: 'Poppins', sans-serif;
+  
+}
+.card-header h1 {
+  margin: 0;
+  font-size: 3rem;
+  font-weight: bold;
+  /* color: #333; */
+}
+
+.card-content {
+  padding: 2rem 1rem;
+}
+
+.card-content h3{
+  font-family: 'Poppins', sans-serif;
+}
+
+.task-form {
+  height: max-content;
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+margin-bottom: 2rem;
+margin-top: 2rem;
+  justify-content: center;
+  align-items: center;
+}
+
+.task-form button {
+  display: inline;
+}
+
+.inputs {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.inputs input {
+  border: 0.1px solid;
+  border-radius: 5px;
+  height: 2.5rem;
+  width: 15rem;
+}
+
+.task-list{
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;  
+}
+.task-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    background-color: white;
+  }
+
+  .task-item-leftpart {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .task-item-rightpart {
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    gap: 1.5rem;
+  }
+
+  .task-title{
+    font-family: 'Poppins', sans-serif;
+    color:black
+  }
