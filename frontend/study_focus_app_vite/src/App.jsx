@@ -38,7 +38,8 @@ function App() {
         <div className="app">
           <Routes>
           <Route path="/login" element={<LoginPage />} />
-          <Route path="/" element={<HomePage />} />
+          <Route path="/" element={<LoginPage />} />
+          <Route path="/home" element={<HomePage />} />
           <Route path="/register" element={<RegisterPage/>}/>
           <Route path="/tasks" element={<TasksPage/>}/>
             <Route path="/focus" element={<FocusPage />} />

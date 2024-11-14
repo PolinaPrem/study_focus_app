@@ -7,7 +7,7 @@ import { useLocation } from "react-router-dom";
 
 export default function FocusPage() {
   const navigate = useNavigate();
-  
+
   const [stats, setStats] = useState({
     daily: { duration: 0, sessions: 0 },
     allTime: { duration: 0, sessions: 0 },
@@ -58,7 +58,7 @@ export default function FocusPage() {
           <h1 className="dashboard-title">Statistics</h1>
           <button 
     className="home-button"
-    onClick={() => navigate('/')}
+    onClick={() => navigate('/home')}
   >
     <Home size={24} />
   </button>
@@ -70,7 +70,7 @@ export default function FocusPage() {
             icon={Clock}
             title="Focus Duration"
             value={stats.daily.duration}
-            subtitle="Today's total focus time"
+            subtitle="Today's total focus time (seconds)"
           />
           <StatCard
             icon={BarChart2}
@@ -85,7 +85,7 @@ export default function FocusPage() {
             icon={Clock}
             title="Total Focus Time"
             value={stats.allTime.duration}
-            subtitle="Lifetime focus duration"
+            subtitle="Lifetime focus duration(seconds)"
           />
           <StatCard
             icon={Calendar}

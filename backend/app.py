@@ -59,6 +59,7 @@ def home():
 
 @app.route("/register", methods=["POST"])
 def register():
+    session.clear()
     db=get_db()
     cur=db.cursor()
     data=request.get_json()
@@ -99,7 +100,7 @@ def register():
         flash("Registration completed")
         return jsonify({'message':"Registration successful"}), 200
 
-@app.route("/login")
+@app.route("/login", methods=["POST"])
 def login():
     session.clear()
     db = get_db()
@@ -109,21 +110,30 @@ def login():
     email = data.get('email')
     password = data.get('password')
     cur = db.cursor()
-    cur.execute("SELECT email FROM users WHERE email=?",(email,))
-    user_email=cur.fetchone()
-    if user_email is None:
-        return jsonify ({"message":"Email does not exist in the database."}), 404
-    cur.execute("SELECT hash FROM users WHERE email =?",(email,))
-    user_hash=user_hash[0]
-    if check_password_hash(user_hash,password):
-        flash("password checked all good") #just for testing, delete once it works
-        cur.execute("SELECT id FROM users WHERE email =?",(email,))
-        user_id =user_id[0]
-        session["user_id"]=user_id
-        flash("Login completed")
-        return jsonify({'message':'Login successful'}),200
+    cur.execute("SELECT id FROM users WHERE email=?",(email,))
+    user_id=cur.fetchone()
+    
+    user_id =user_id[0]
+    print(user_id)
+    if user_id is None:
+        return jsonify ({"message":"User's email does not exist in the database."}), 404
+
+    cur.execute("SELECT hash FROM users WHERE email=?", (email,))
+    user_hash_result = cur.fetchone()
+
+    if not user_hash_result:
+        return jsonify({"message": "User's password hash not found."}), 404
+
+    user_hash_result = user_hash_result[0]  # Extract the password hash
+
+    # Check if the entered password matches the stored hash
+    if check_password_hash(user_hash_result, password):
+        session["user_id"] = user_id  # Store user_id in the session
+        return jsonify({'message': 'Login successful'}), 200
     else:
-        return jsonify({"message":"Password chek_hash didnt work"}), 401
+        return jsonify({"message": "Password is incorrect"}), 401
+        
+    
     
     
 

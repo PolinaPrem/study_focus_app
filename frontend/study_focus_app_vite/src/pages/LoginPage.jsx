@@ -5,7 +5,7 @@ import '../pages_css/LoginPage.css';
 export default function LoginPage(){
 
     const navigate = useNavigate();
-
+    
     const [formData, setFormData]=useState({
         email: '',
         password:''
@@ -29,11 +29,12 @@ export default function LoginPage(){
     }
     const handleSubmit = async (e) => {
         e.preventDefault();
-       
+        
         setError('');
         try{
-            const response = await fetch('/login', {
+            const response = await fetch("http://127.0.0.1:5000/login", {
                 method: 'POST',
+                credentials:'include',
                 headers: {
                     'Content-Type': 'application/json',
                 },
@@ -41,15 +42,17 @@ export default function LoginPage(){
             });
             if (response.ok) {
                 // If login successful, navigate to home page
-                navigate('/');
+                navigate('/home');
             } else {
                 const data = await response.json();
                 setError(data.message || 'Login failed');
+                alert("User is not found")
             }
         }
         
         catch(err){
             setError("Server error. Please try again.")
+            alert("User not found")
         }
         }
     return(
@@ -61,13 +64,13 @@ export default function LoginPage(){
                <div className='login-container'>
                 <form method="POST" action='/login' className='form' onSubmit={handleSubmit}>
                     <input autoComplete='off' placeholder='Email' name='email' onChange={handleChange} value={formData.email}></input>
-                    <input autoComplete='off' placeholder='Password' name='password' onChange={handleChange} value={formData.password}></input>
+                    <input autoComplete='off' placeholder='Password' name='password' type="password" onChange={handleChange} value={formData.password}></input>
                     <button name='submit' type='submit'>Log In</button>
                 </form>
                 <button onClick={handleRegister}>Register</button>
                 </div>
                 <img src="src/images/studying.jpg"
-                width="80%"/> 
+                width="100%"/> 
            
 
         </div>

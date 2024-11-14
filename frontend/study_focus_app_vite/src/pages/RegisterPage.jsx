@@ -71,7 +71,7 @@ export default function RegisterPage() {
       const data = await response.json();
 
       if (response.ok) {
-        navigate("/");
+        navigate("/home");
       } else {
         setError(data.message || "Registration failed");
       }
@@ -124,7 +124,7 @@ export default function RegisterPage() {
             </button>
           </form>
         </div>
-        <img src="src/images/studying.jpg" width="80%" />
+        <img src="src/images/studying.jpg" width="100%" />
       </div>
     </>
   );

@@ -173,7 +173,7 @@ export default function FocusPage() {
           <h1>Focus Timer</h1>
           <button 
     className="home-button"
-    onClick={() => navigate('/')}
+    onClick={() => navigate('/home')}
   >
     <Home size={24} />
   </button>
