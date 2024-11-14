@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
-import { PlusCircle, Hourglass, Clock, X } from "lucide-react";
+import { Home, Hourglass, Clock, X } from "lucide-react";
 import "../pages_css/TasksPage.css";
 import { useEffect } from "react";
 
@@ -119,6 +119,12 @@ export default function TasksPage() {
         <div className="card">
           <div className="card-header">
             <h1>My Tasks</h1>
+            <button 
+    className="home-button"
+    onClick={() => navigate('/')}
+  >
+    <Home size={24} />
+  </button>
           </div>
           <div className="card-content">
             <h3>Add task name and duration</h3>

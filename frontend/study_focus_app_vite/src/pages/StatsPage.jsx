@@ -1,11 +1,13 @@
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
-import { Clock, Calendar, BarChart2 } from 'lucide-react';
+import { Clock,Home, Calendar, BarChart2 } from 'lucide-react';
 import "../pages_css/StatsPage.css";
 import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
 
 export default function FocusPage() {
+  const navigate = useNavigate();
+  
   const [stats, setStats] = useState({
     daily: { duration: 0, sessions: 0 },
     allTime: { duration: 0, sessions: 0 },
@@ -54,7 +56,12 @@ export default function FocusPage() {
       <div className="stats-dashboard">
         <div className="dashboard-header">
           <h1 className="dashboard-title">Statistics</h1>
-          
+          <button 
+    className="home-button"
+    onClick={() => navigate('/')}
+  >
+    <Home size={24} />
+  </button>
         </div>
         <section className="stats-section">
         <h3 className="section-title">Today</h3>

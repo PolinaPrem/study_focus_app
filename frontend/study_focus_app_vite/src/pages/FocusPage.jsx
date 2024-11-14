@@ -1,11 +1,12 @@
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
-import { Play, Pause, RotateCcw } from "lucide-react";
+import { Home, Pause, RotateCcw } from "lucide-react";
 import "../pages_css/FocusPage.css";
 import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
 
 export default function FocusPage() {
+  const navigate = useNavigate();
   const location = useLocation();
   const { taskId } = location.state || {};
 
@@ -109,12 +110,14 @@ export default function FocusPage() {
         body: JSON.stringify({
           task_id: taskId,
           focus_session_id: focusSession,
-          time_spent: isPomodoro
-            ? isOnBreak
-              ? 600 - timeLeft
-              : 3000 - timeLeft
-            : duration-timeLeft,
           time_left: timeLeft,
+          time_spent: isPomodoro
+          ? isOnBreak
+            ? Math.max(600 - timeLeft, 0) 
+            : Math.max(3000 - timeLeft, 0) 
+          : Math.max(duration - timeLeft, 0), 
+      
+          
           is_on_break: isOnBreak,
           is_pomodoro: isPomodoro,
         }),
@@ -168,10 +171,17 @@ export default function FocusPage() {
       <div className="focus-page">
         <div className="header">
           <h1>Focus Timer</h1>
+          <button 
+    className="home-button"
+    onClick={() => navigate('/')}
+  >
+    <Home size={24} />
+  </button>
         </div>
         <div className="focus-timer">
           {taskId ? (
-            <h3>Focusing on task: {title}</h3>
+            <h3>Focusing on task: 
+              <span>{title}</span></h3>
           ) : (
             <h3>Pomodoro Mode</h3>
           )}
@@ -212,10 +222,25 @@ export default function FocusPage() {
           </div>
         </div>  
         <div className="buttons">
-          <button className={`timer-button ${isRunning ? 'stop' : 'start'}`}
-              onClick={isRunning ? stopFocus : startFocus}>
-            {isPomodoro ? isRunning ? <>Finish <RotateCcw size={14}/></>: <>Start </> : isRunning ? "Pause" : "Play"}
-          </button>
+        <button
+  className={`timer-button ${isRunning ? 'stop' : 'start'}`}
+  onClick={timeLeft === 0 && !isPomodoro ? startFocus : isRunning ? stopFocus : startFocus}
+>
+  {isPomodoro ? (
+    isRunning ? (
+      <>Finish <RotateCcw size={14} /></>
+    ) : (
+      <>Start</>
+    )
+  ) : timeLeft === 0 ? (
+    <>Restart<RotateCcw size={14}/></> // Show Restart when timeLeft is 0 and not Pomodoro
+  ) : isRunning ? (
+    "Pause"
+  ) : (
+    "Play"
+  )}
+</button>
+
         </div>
         
       </div>

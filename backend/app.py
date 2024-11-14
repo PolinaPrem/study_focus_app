@@ -217,34 +217,31 @@ def  focus_stop():
         time_left = data['time_left']
         end_time = datetime.now()
         end_time_format=end_time.isoformat()
-
+        print(f'time_spent={time_spent}')
         print(focus_session_id)
         cur.execute("SELECT *  FROM focus_sessions WHERE id = ?", 
         (focus_session_id,))
         focus_session=cur.fetchone()
-        print(focus_session)
+       
         if not focus_session:
             # no session is found
             print("No active session found")
             return jsonify({'message':"Session is not found to be stopped"}), 400
         else:
-            focus_session_id, task_id, user_id, start_time, end_time, duration, date, status, session_type, session_time_left, session_is_on_break, time_spent = focus_session
+            cur.execute("SELECT session_type FROM focus_sessions WHERE id = ?", 
+             (focus_session_id,))
+            session_type=cur.fetchone()
             if session_type=="pomodoro":
-                cur.execute("UPDATE focus_sessions SET end_time = ?, duration = ?, status = 'completed' WHERE id = ?", 
-                  (end_time_format, time_spent, focus_session_id))
-                db.commit()
-                print("Pomodoro timer is stopped")
-               
-
+                
 
                 if is_on_break:
                     #break is done
-                    cur.execute("UPDATE focus_sessions SET end_time =?, status = 'completed', time_left =? WHERE id=?", (end_time_format, 0, focus_session_id))
+                    cur.execute("UPDATE focus_sessions SET end_time =?, status = 'completed', time_left =?, duration = ?, time_spent=? WHERE id=?", (end_time_format, 0,"300", time_spent, focus_session_id))
                     db.commit()
                     return jsonify({"message": "Pomodoro timer stopped", "session_id": focus_session_id, "is_on_break": False, "is_pomodoro": True}), 200
                 elif not is_on_break:
                     # focus time is done
-                    cur.execute("UPDATE focus_sessions SET end_time =?, status = 'completed', time_left =? WHERE id=?", (end_time_format, time_left,  focus_session_id))
+                    cur.execute("UPDATE focus_sessions SET end_time =?, status = 'completed', time_left =?, duration = ?, time_spent=? WHERE id=?", (end_time_format, 0, "3000", time_spent,  focus_session_id))
                     db.commit()
                     return jsonify({"message": "Pomodoro timer stopped", "session_id": focus_session_id, "is_on_break": True, "is_pomodoro": True}), 200
                 
@@ -252,19 +249,18 @@ def  focus_stop():
 
             else:
                 if time_left ==0:
-                    cur.execute("UPDATE focus_sessions SET end_time =?, status ='completed', time_left=? WHERE id=?",(end_time_format, 0, focus_session_id))
+                    cur.execute("UPDATE focus_sessions SET end_time =?, status ='completed', time_left=?, time_spent =? WHERE id=?",(end_time_format, 0,time_spent, focus_session_id))
                     db.commit()
                     print("Session is completed, task is done, timer is stopped")
                     
                     
-                    status='completed'
                     
-                    cur.execute("UPDATE tasks SET status =? WHERE id =?",(status, task_id))
                     return jsonify({"message": "Session is completed, timer stopped","is_pomodoro":False}), 200
                 else:
-                    cur.execute("UPDATE focus_sessions SET time_left =? WHERE id=?",(time_left, focus_session_id))
+                    cur.execute("UPDATE focus_sessions SET time_left =?, time_spent=? WHERE id=?",(time_left, time_spent, focus_session_id))
                     db.commit()
                     print(f'Timer is stopped,session_id:{focus_session_id},"time left":{time_left}')
+                    print(time_spent)
                     return jsonify({"message":"Timer stopped, time_left updated","time_left":time_left, "is_pomodoro":False})
 
 
@@ -361,9 +357,11 @@ def stats():
     daily_sessions=cur.fetchone()
     print(daily_duration, daily_sessions)
     #weely data
-    cur.execute("SELECT SUM(time_spent), COUNT (*) FROM focus_sessions WHERE user_id = ? AND status = 'completed' ",(user_id,))
-    total_duration, total_sessions = cur.fetchone()
-    
+    cur.execute("SELECT SUM(time_spent)FROM focus_sessions WHERE user_id = ? ",(user_id,))
+    total_duration = cur.fetchone()
+    cur.execute("SELECT COUNT(*) FROM focus_sessions WHERE user_id = ? AND status ='completed'", (user_id,))
+    total_sessions=cur.fetchone()
+    print(total_duration, total_sessions)
     return jsonify({
         'daily': {
             'duration': daily_duration or 0,

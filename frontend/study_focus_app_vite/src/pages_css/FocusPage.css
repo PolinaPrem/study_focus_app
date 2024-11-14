@@ -4,6 +4,26 @@ body.focus-page-background {
   background-repeat: no-repeat;
 }
 
+.home-button {
+  position: absolute;
+  top: 1.5rem;
+  right: 1rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #666;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  border-radius: 20px;
+  transition: all 0.2s ease;
+}
+
+.home-button:hover {
+  background: rgba(0, 0, 0, 0.05);
+  color: #333;
+}
 
 .timer-circle {
     position: relative;
@@ -15,7 +35,8 @@ body.focus-page-background {
   }
 
   .focus-page .header{
-margin-top: 4rem ;
+margin-top: 4.5rem ;
+font-family: 'Poppins', sans-serif;
 
   }
  .focus-timer{
@@ -24,6 +45,13 @@ margin-top: 4rem ;
     gap: 2rem;
  }
 
+ .focus-timer h3{
+  font-family: 'Poppins', sans-serif;
+
+ }
+ .focus-page h3 span{
+  color: rgb(72, 25, 143);
+ }
 
   .progress-background {
     position: absolute;

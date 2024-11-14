@@ -9,6 +9,27 @@ body.stats-page-background {
     margin-top: 3rem;
     font-family: 'Poppins', sans-serif;
 }
+.home-button {
+  position: absolute;
+  top: 1.5rem;
+  right: 1rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #666;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  border-radius: 20px;
+  transition: all 0.2s ease;
+}
+
+.home-button:hover {
+  background: rgba(0, 0, 0, 0.05);
+  color: #333;
+}
+
 
 .dashboard-subtitle{
     
