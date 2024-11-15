@@ -16,7 +16,7 @@ app = Flask(__name__)
 
 CORS(app, resources={r"/*": {"origins": "http://127.0.0.1:5173"}}, supports_credentials=True)
 
-app.secret_key = secrets.token_hex(16)
+app.secret_key ="FYGULG$#$$785HFY"
 
 app.config["SESSION_TYPE"] = "filesystem"
 app.config['SESSION_PERMANENT'] = True 
