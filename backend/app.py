@@ -48,7 +48,7 @@ def close_connection(exception):
 
 @app.after_request
 def after_request(response):
-    response.headers.add("Access-Control-Allow-Origin", "http://127.0.0.1:5173")
+    response.headers.add("Access-Control-Allow-Origin", "https://study-focus-app-frontend.onrender.com")
     response.headers.add("Access-Control-Allow-Headers", "Content-Type, Authorization")
     response.headers.add("Access-Control-Allow-Methods", "GET,PUT,POST,DELETE,OPTIONS")
     response.headers.add(
