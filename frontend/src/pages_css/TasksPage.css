@@ -8,7 +8,7 @@ body {
 
 }
 body.tasks-page-background {
-  background-image: url("/src/images/background2.jpg");
+  background-image: url("/images/background2.jpg");
   background-size: cover;
   background-repeat: no-repeat;
 }

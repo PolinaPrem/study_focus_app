@@ -35,7 +35,7 @@ export default function HomePage() {
           <h1>Focus Study Timer</h1>
         </header>
         <div className="image-container">
-          <img src="src/images/kuromystudying.png" width="80%" />
+          <img src="/images/kuromystudying.png" width="80%" />
         </div>
         <section className="menu-grid">
             {

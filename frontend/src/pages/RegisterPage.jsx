@@ -124,7 +124,7 @@ export default function RegisterPage() {
             </button>
           </form>
         </div>
-        <img src="src/images/studying.jpg" width="100%" />
+        <img src="/images/studying.jpg" width="100%" />
       </div>
     </>
   );

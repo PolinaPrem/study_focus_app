@@ -165,8 +165,7 @@ export default function TasksPage() {
                         task.completed ? "completed" : ""
                       }`}
                     >
-                      {/* {task.completed ? (<img src="src/images/toggle1.png" alt="Completed" width={20} height={20}/>)
-                      :(<CheckCircle2 size={20}/>)} */}
+                      
                       <Hourglass size={20}/>
                     </button>
                     <span className="task-title">{task.title}</span>
