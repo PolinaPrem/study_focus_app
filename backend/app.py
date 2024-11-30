@@ -14,7 +14,7 @@ app = Flask(__name__)
 
 CORS(
     app,
-    resources={r"/*": {"origins": "http://127.0.0.1:5173"}},
+    resources={r"/*": {"origins": "https://study-focus-app-frontend.onrender.com"}},
     supports_credentials=True,
 )
 
