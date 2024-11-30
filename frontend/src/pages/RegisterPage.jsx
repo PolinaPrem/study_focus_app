@@ -47,7 +47,7 @@ export default function RegisterPage() {
   };
 
   const handleSubmit = async (e) => {
-    const url = "http://127.0.0.1:5000/register";
+    const url = "https://study-focus-app.onrender.com/register";
     e.preventDefault(); 
     console.log("submiting");
 
