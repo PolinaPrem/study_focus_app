@@ -3,7 +3,8 @@ from flask_session import Session
 
 from flask import g
 from werkzeug.security import check_password_hash, generate_password_hash
-import sqlite3
+
+import psycopg2
 import secrets
 from flask_cors import CORS
 from datetime import datetime, timedelta, date
@@ -26,13 +27,15 @@ app.permanent_session_lifetime = timedelta(days=7)
 Session(app)
 
 
-DATABASE = "app.db"
-
-
 def get_db():
     db = getattr(g, "_database", None)
     if db is None:
-        db = g._database = sqlite3.connect(DATABASE)
+        db = g._database = psycopg2.connect(
+            host=os.environ["DB_HOST"],
+            database=os.environ["DB_URL"],
+            user=os.environ["DB_USERNAME"],
+            password=os.environ["DB_PASSWORD"],
+        )
     return db
 
 

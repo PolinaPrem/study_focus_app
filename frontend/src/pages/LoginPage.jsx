@@ -69,7 +69,7 @@ export default function LoginPage(){
                 </form>
                 <button onClick={handleRegister}>Register</button>
                 </div>
-                <img src="src/images/studying.jpg"
+                <img src="/images/studying.jpg"
                 width="100%"/> 
            
 
