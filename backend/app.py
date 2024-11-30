@@ -32,9 +32,9 @@ def get_db():
     if db is None:
         db = g._database = psycopg2.connect(
             host=os.environ["DB_HOST"],
-            database=os.environ["DB_URL"],
-            # user=os.environ["DB_USERNAME"],
-            # password=os.environ["DB_PASSWORD"],
+            dbname=os.environ["DB_NAME"],
+            user=os.environ["DB_USERNAME"],
+            password=os.environ["DB_PASSWORD"],
         )
     return db
 
