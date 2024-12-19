@@ -83,7 +83,7 @@ def register():
     if len(username) < 3:
         return jsonify({"message": "Username must be at least 3 characters long"}), 400
 
-    cur.execute("SELECT * FROM users WHERE username = ?", (username,))
+    cur.execute("SELECT * FROM users WHERE username = %s", (username,))
     user = cur.fetchone()  # to get 1 result
 
     if user:
@@ -99,11 +99,11 @@ def register():
         hashed_password = generate_password_hash(password, method="pbkdf2:sha256")
         print(username, hashed_password)
         cur.execute(
-            "INSERT INTO users (username, hash, email) VALUES (?, ?, ?)",
+            "INSERT INTO users (username, hash, email) VALUES (%s, %s, %s)",
             (username, hashed_password, email),
         )
         db.commit()
-        cur.execute("SELECT id FROM users WHERE username = ?", (username,))
+        cur.execute("SELECT id FROM users WHERE username = %s", (username,))
         session_id = cur.fetchone()
         session["user_id"] = session_id[0]
         session["username"] = username
@@ -124,7 +124,7 @@ def login():
     email = data.get("email")
     password = data.get("password")
     cur = db.cursor()
-    cur.execute("SELECT id FROM users WHERE email=?", (email,))
+    cur.execute("SELECT id FROM users WHERE email=%s", (email,))
     user_id = cur.fetchone()
 
     user_id = user_id[0]
@@ -132,7 +132,7 @@ def login():
     if user_id is None:
         return jsonify({"message": "User's email does not exist in the database."}), 404
 
-    cur.execute("SELECT hash FROM users WHERE email=?", (email,))
+    cur.execute("SELECT hash FROM users WHERE email=%s", (email,))
     user_hash_result = cur.fetchone()
 
     if not user_hash_result:
@@ -171,7 +171,7 @@ def focus_start():
             print("is pomodoro")
             if not is_on_break:
                 cur.execute(
-                    "INSERT INTO focus_sessions (task_id, user_id, start_time, date, status, session_type,duration, is_on_break) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
+                    "INSERT INTO focus_sessions (task_id, user_id, start_time, date, status, session_type,duration, is_on_break) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)",
                     (
                         task_id,
                         user_id,
@@ -200,7 +200,7 @@ def focus_start():
                 )
             else:
                 cur.execute(
-                    "INSERT INTO focus_sessions (task_id, user_id, start_time, date, status, session_type,duration, is_on_break) VALUES (?, ?, ?, ?, ?, ?,?, ?)",
+                    "INSERT INTO focus_sessions (task_id, user_id, start_time, date, status, session_type,duration, is_on_break) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)",
                     (
                         task_id,
                         user_id,
@@ -229,16 +229,16 @@ def focus_start():
 
             # check if the session for this task exists
             cur.execute(
-                "SELECT id, time_left itle FROM focus_sessions WHERE task_id = ?",
+                "SELECT id, time_left itle FROM focus_sessions WHERE task_id = %s",
                 (task_id,),
             )
             existing_session = cur.fetchone()
 
             if existing_session:
                 # getting task duration, checking if it exists, if not-setting to 60
-                cur.execute("SELECT duration FROM tasks WHERE id = ?", (task_id,))
+                cur.execute("SELECT duration FROM tasks WHERE id = %s", (task_id,))
                 task_duration = cur.fetchone()
-                cur.execute("SELECT title FROM tasks WHERE id = ?", (task_id,))
+                cur.execute("SELECT title FROM tasks WHERE id = %s", (task_id,))
                 task_title = cur.fetchone()
                 task_duration1 = task_duration[0]
                 task_duration = task_duration1 * 60
@@ -257,9 +257,9 @@ def focus_start():
                 )
             else:
                 # getting task duration, checking if it exists, if not-setting to 60
-                cur.execute("SELECT duration FROM tasks WHERE id = ?", (task_id,))
+                cur.execute("SELECT duration FROM tasks WHERE id = %s", (task_id,))
                 task_duration = cur.fetchone()
-                cur.execute("SELECT title FROM tasks WHERE id = ?", (task_id,))
+                cur.execute("SELECT title FROM tasks WHERE id = %s", (task_id,))
                 task_title = cur.fetchone()
                 if task_duration:
                     task_duration1 = task_duration[0]
@@ -269,7 +269,7 @@ def focus_start():
                 time_left = task_duration
                 # insert a new session  into the database
                 cur.execute(
-                    "INSERT INTO focus_sessions (task_id, user_id, start_time, date, status, session_type, time_left, duration) VALUES (?, ?, ?, ?, ?, ?,?,?)",
+                    "INSERT INTO focus_sessions (task_id, user_id, start_time, date, status, session_type, time_left, duration) VALUES (%s, %s, %s, %s, %s, %s, %s ,%s)",
                     (
                         task_id,
                         user_id,
@@ -315,7 +315,7 @@ def focus_stop():
         end_time_format = end_time.isoformat()
         print(f"time_spent={time_spent}")
         print(focus_session_id)
-        cur.execute("SELECT *  FROM focus_sessions WHERE id = ?", (focus_session_id,))
+        cur.execute("SELECT *  FROM focus_sessions WHERE id = %s", (focus_session_id,))
         focus_session = cur.fetchone()
 
         if not focus_session:
@@ -324,7 +324,7 @@ def focus_stop():
             return jsonify({"message": "Session is not found to be stopped"}), 400
         else:
             cur.execute(
-                "SELECT session_type FROM focus_sessions WHERE id = ?",
+                "SELECT session_type FROM focus_sessions WHERE id = %s",
                 (focus_session_id,),
             )
             session_type = cur.fetchone()
@@ -333,7 +333,7 @@ def focus_stop():
                 if is_on_break:
                     # break is done
                     cur.execute(
-                        "UPDATE focus_sessions SET end_time =?, status = 'completed', time_left =?, duration = ?, time_spent=? WHERE id=?",
+                        "UPDATE focus_sessions SET end_time =%s, status = 'completed', time_left =%s, duration = %s, time_spent=%s WHERE id=%s",
                         (end_time_format, 0, "300", time_spent, focus_session_id),
                     )
                     db.commit()
@@ -351,7 +351,7 @@ def focus_stop():
                 elif not is_on_break:
                     # focus time is done
                     cur.execute(
-                        "UPDATE focus_sessions SET end_time =?, status = 'completed', time_left =?, duration = ?, time_spent=? WHERE id=?",
+                        "UPDATE focus_sessions SET end_time =%s, status = 'completed', time_left =%s, duration = %s, time_spent=%s WHERE id=%s",
                         (end_time_format, 0, "3000", time_spent, focus_session_id),
                     )
                     db.commit()
@@ -370,7 +370,7 @@ def focus_stop():
             else:
                 if time_left == 0:
                     cur.execute(
-                        "UPDATE focus_sessions SET end_time =?, status ='completed', time_left=?, time_spent =? WHERE id=?",
+                        "UPDATE focus_sessions SET end_time =%s, status ='completed', time_left=%s, time_spent =%s WHERE id=%s",
                         (end_time_format, 0, time_spent, focus_session_id),
                     )
                     db.commit()
@@ -387,7 +387,7 @@ def focus_stop():
                     )
                 else:
                     cur.execute(
-                        "UPDATE focus_sessions SET time_left =?, time_spent=? WHERE id=?",
+                        "UPDATE focus_sessions SET time_left =%s, time_spent=%s WHERE id=%s",
                         (time_left, time_spent, focus_session_id),
                     )
                     db.commit()
@@ -416,7 +416,7 @@ def tasks():
     # print(user_id)
     if request.method == "GET":
         print(request.cookies)
-        cur.execute("SELECT * FROM tasks WHERE user_id =?", (user_id,))
+        cur.execute("SELECT * FROM tasks WHERE user_id =%s", (user_id,))
         tasks_rows = cur.fetchall()
         tasks_list = []
         for task in tasks_rows:
@@ -434,13 +434,13 @@ def tasks():
         status = "in_process"
 
         cur.execute(
-            "INSERT INTO tasks (title, duration, status, user_id) VALUES (?,?,?,?) ",
+            "INSERT INTO tasks (title, duration, status, user_id) VALUES (%s,%s,%s,%s) ",
             (title, duration, status, user_id),
         )
         db.commit()
         task_id = cur.lastrowid
         print(task_id)
-        cur.execute("SELECT id, title, duration FROM tasks WHERE id=?", (task_id,))
+        cur.execute("SELECT id, title, duration FROM tasks WHERE id=%s", (task_id,))
         task_result = cur.fetchone()
         # create a dictionary with column names as keys
         if task_result:
@@ -467,8 +467,8 @@ def handle_task(task_id):
             status = "completed"
         else:
             status = "in_process"
-        cur.execute("UPDATE tasks SET status =? WHERE id =?", (status, task_id))
-        cur.execute("SELECT * FROM tasks WHERE id =?", (task_id,))
+        cur.execute("UPDATE tasks SET status =%s WHERE id =%s", (status, task_id))
+        cur.execute("SELECT * FROM tasks WHERE id =%s", (task_id,))
         updated_task_row = cur.fetchone()
         print(updated_task_row)
         updated_task = {}
@@ -478,7 +478,7 @@ def handle_task(task_id):
         updated_task["status"] = updated_task_row[3]
         return jsonify(updated_task), 200
     elif request.method == "DELETE":
-        cur.execute("DELETE FROM tasks WHERE id=?", (task_id,))
+        cur.execute("DELETE FROM tasks WHERE id=%s", (task_id,))
         db.commit()
         return jsonify({"message": "Task deleted"}), 200
 
@@ -491,23 +491,23 @@ def stats():
     user_id = session.get("user_id")
     # daily data
     cur.execute(
-        "SELECT SUM(time_spent) FROM focus_sessions WHERE user_id = ? AND date = ?",
+        "SELECT SUM(time_spent) FROM focus_sessions WHERE user_id = %s AND date = %s",
         (user_id, today),
     )
     daily_duration = cur.fetchone()
     cur.execute(
-        "SELECT COUNT(*) FROM focus_sessions WHERE user_id = ? AND date = ? AND status ='completed'",
+        "SELECT COUNT(*) FROM focus_sessions WHERE user_id = %s AND date = %s AND status ='completed'",
         (user_id, today),
     )
     daily_sessions = cur.fetchone()
     print(daily_duration, daily_sessions)
     # weely data
     cur.execute(
-        "SELECT SUM(time_spent)FROM focus_sessions WHERE user_id = ? ", (user_id,)
+        "SELECT SUM(time_spent)FROM focus_sessions WHERE user_id = %s ", (user_id,)
     )
     total_duration = cur.fetchone()
     cur.execute(
-        "SELECT COUNT(*) FROM focus_sessions WHERE user_id = ? AND status ='completed'",
+        "SELECT COUNT(*) FROM focus_sessions WHERE user_id = %s AND status ='completed'",
         (user_id,),
     )
     total_sessions = cur.fetchone()
@@ -521,6 +521,12 @@ def stats():
             },
         }
     )
+
+
+
+    
+
+        
 
 
 if __name__ == "__main__":
