@@ -20,7 +20,7 @@ export default function TasksPage() {
   //runs automaticly when openning the page to show all the previous tasks
   const fetchTasks = async () => {
     try {
-      const response = await fetch("http://127.0.0.1:5000/tasks",{
+      const response = await fetch("https://study-focus-app.onrender.com/tasks",{
         credentials: 'include',
         method:"GET",
       });
@@ -40,7 +40,7 @@ export default function TasksPage() {
     e.preventDefault();
 
     try {
-      const response = await fetch("http://127.0.0.1:5000/tasks", {
+      const response = await fetch("https://study-focus-app.onrender.com/tasks", {
         
         credentials: 'include',
         method: "POST",
@@ -100,7 +100,7 @@ export default function TasksPage() {
   //deleting tasks with delete request
   const deleteTask = async (taskId) => {
     try {
-      const response = await fetch(`http://127.0.0.1:5000/tasks/${taskId}`, {
+      const response = await fetch(`https://study-focus-app.onrender.com/tasks/${taskId}`, {
         method: "DELETE",
       });
       if (!response.ok) {
