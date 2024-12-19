@@ -442,6 +442,9 @@ def tasks():
         print(task_id)
         cur.execute("SELECT id, title, duration FROM tasks WHERE id=%s", (task_id,))
         task_result = cur.fetchone()
+        if not task_id:
+            return jsonify({"message": "Error: Task not inserted properly."})
+        print(f"Inserted task with ID: {task_id}")
         # create a dictionary with column names as keys
         if task_result:
             new_task = {
