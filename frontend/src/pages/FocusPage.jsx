@@ -62,7 +62,7 @@ export default function FocusPage() {
    
     try {
       console.log("trying");
-      const response = await fetch("http://127.0.0.1:5000/focus/start", {
+      const response = await fetch("https://study-focus-app.onrender.com/focus/start", {
         mode: "cors",
         credentials: "include",
         method: "POST",
@@ -100,7 +100,7 @@ export default function FocusPage() {
   const stopFocus = async (e) => {
     console.log(focusSession);
     try {
-      const response = await fetch("http://127.0.0.1:5000/focus/stop", {
+      const response = await fetch("https://study-focus-app.onrender.com/focus/stop", {
         mode: "cors",
         credentials: "include",
         method: "POST",
