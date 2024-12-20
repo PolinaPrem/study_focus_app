@@ -420,7 +420,7 @@ def tasks():
         tasks_rows = cur.fetchall()
         tasks_list = []
         for task in tasks_rows:
-            print(task)
+            
             task_dict = {"id": task[0], "title": task[1], "duration": task[2]}
             tasks_list.append(task_dict)
         
@@ -439,11 +439,12 @@ def tasks():
             (title, duration, status, user_id),
         )
         db.commit()
+        task_id = cur.fetchone()['id']
         cur.execute("SELECT id FROM tasks WHERE title=%s", (title,))
         test=cur.fetchone()
-        print(f"test, secting id: {test}")
-        task_id = cur.lastrowid
-        print(task_id)
+        print(f"test, selecting id: {test}")
+        
+        print(f"task_id: {task_id}")
         cur.execute("SELECT id, title, duration FROM tasks WHERE id=%s", (task_id,))
         task_result = cur.fetchone()
         if not task_id:
