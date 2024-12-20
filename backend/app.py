@@ -423,21 +423,25 @@ def tasks():
             print(task)
             task_dict = {"id": task[0], "title": task[1], "duration": task[2]}
             tasks_list.append(task_dict)
-
+        
         return jsonify(tasks_list)
     elif request.method == "POST":
         data = request.json
+        
         if not data:
             return jsonify({"message": "Didnt receive any data about task"})
         title = data.get("title")
         duration = data.get("duration")
         status = "in_process"
-
+        print(title, duration, status)
         cur.execute(
             "INSERT INTO tasks (title, duration, status, user_id) VALUES (%s,%s,%s,%s) ",
             (title, duration, status, user_id),
         )
         db.commit()
+        cur.execute("SELECT id FROM tasks WHERE title=%s", (title,))
+        test=cur.fetchone()
+        print(f"test, secting id: {test}")
         task_id = cur.lastrowid
         print(task_id)
         cur.execute("SELECT id, title, duration FROM tasks WHERE id=%s", (task_id,))
