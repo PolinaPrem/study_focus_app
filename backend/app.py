@@ -439,7 +439,8 @@ def tasks():
             (title, duration, status, user_id),
         )
         db.commit()
-        task_id = cur.fetchone()['id']
+        # task_id = cur.fetchone()['id']
+        task_id=1
         cur.execute("SELECT * FROM tasks")
         table=cur.fetchall()
         print(table)
