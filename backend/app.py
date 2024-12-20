@@ -439,12 +439,16 @@ def tasks():
             (title, duration, status, user_id),
         )
         db.commit()
-        task_id = cur.fetchone()['id']
+        cur.execute("SELECT * FROm tasks")
+        table=cur.fetchone()
+        print(table)
+        # task_id = cur.fetchone()['id']
         cur.execute("SELECT id FROM tasks WHERE title=%s", (title,))
         test=cur.fetchone()
         print(f"test, selecting id: {test}")
         
-        print(f"task_id: {task_id}")
+
+        # print(f"task_id: {task_id}")
         cur.execute("SELECT id, title, duration FROM tasks WHERE id=%s", (task_id,))
         task_result = cur.fetchone()
         if not task_id:
